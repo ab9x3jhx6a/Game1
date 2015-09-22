@@ -1,7 +1,7 @@
 {
   "version": "1.0",
-  "name": "Game1",
-  "description": "Game1",
+  "name": "Game1test",
+  "description": "Game1test",
   "launch_path": "/index.html",
   "icons": {
     "128": "/res/icon.png"

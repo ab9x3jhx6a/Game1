@@ -13,20 +13,20 @@ var DirectionType = {
 };
 
 var Joystick = cc.Node.extend({
-    _stick: null,       //??
-    _stickBG: null,     //????
-    _listener: null,    //???
-    _radius: 0,         //??
-    _angle: null,       //??
-    _radian: null,      //??
-    _target: null,      //?????
-    _speed: 0,          //????
-    _speed1: 1,         //????
-    _speed2: 2,         //????
-    _touchType: null,   //????
-    _directionType: null,   //????
-    _opacity: 0,        //???
-    callback: null,     //????
+    _stick: null,       //joystick_png
+    _stickBG: null,     //joystickbg_png
+    _listener: null,    //listener
+    _radius: 0,         //radius
+    _angle: null,       //angle
+    _radian: null,      //radian
+    _target: null,      //target
+    _speed: 0,          //speed0
+    _speed1: 1,         //speed1(halfradius)
+    _speed2: 2,         //speed2(fullradius)
+    _touchType: null,   //touchtype
+    _directionType: null,   //direction
+    _opacity: 0,        //opacity
+    callback: null,
     ctor: function(stickBG, stick, radius, touchType, directionType, target)
     {
         this._super();
@@ -34,10 +34,10 @@ var Joystick = cc.Node.extend({
         this._touchType = touchType;
         this._directionType = directionType;
 
-        //??????
+        //create sprite for joystick
         this._createStickSprite(stickBG, stick, radius);
 
-        //???????
+        //init
         this._initTouchEvent();
     },
 
@@ -48,25 +48,25 @@ var Joystick = cc.Node.extend({
         if(this._touchType == TouchType.FOLLOW)
             this.setVisible(false);
 
-        //??????
+        //BG for joystick
         this._stickBG = new cc.Sprite(stickBG);
         this._stickBG.setPosition(cc.p(radius, radius));
         this.addChild(this._stickBG);
 
-        //????
+        //sprite for joystick
         this._stick = new cc.Sprite(stick);
         this._stick.setPosition(cc.p(radius, radius));
         this.addChild(this._stick);
 
-        //??????????
+        //scale the sprites
         var scale = radius / (this._stickBG.getContentSize().width / 2);
         this._stickBG.setScale(scale);
         this._stick.setScale(scale);
 
-        //????
+        //set content size
         this.setContentSize(this._stickBG.getBoundingBox());
 
-        //????
+        //set anchor
         this.setAnchorPoint(cc.p(0.5, 0.5));
     },
 
@@ -80,14 +80,14 @@ var Joystick = cc.Node.extend({
             onTouchEnded: this.onTouchEnded
         });
 
-        //??????????????
+        //if exist same object, removed
         this.setUserObject(this._listener);
 
-        //??????
+        //add listener
         cc.eventManager.addListener(this._listener, this._stickBG);
     },
 
-    //???????
+    //calculate angle and return
     _getAngle: function(point)
     {
         var pos = this._stickBG.getPosition();
@@ -95,14 +95,14 @@ var Joystick = cc.Node.extend({
         return this._angle;
     },
 
-    //???????
+    //calculate radian and return
     _getRadian: function(point)
     {
         this._radian = cc.PI / 180 * this._getAngle(point);
         return this._radian;
     },
 
-    //???????????
+    //calculate distance between points and return
     _getDistance: function(pos1, pos2)
     {
         return Math.sqrt(Math.pow(pos1.x - pos2.x, 2) +
@@ -111,10 +111,10 @@ var Joystick = cc.Node.extend({
 
     onTouchBegan: function(touch, event)
     {
-        //??????
+        //listener target
         var target = event.getCurrentTarget();
 
-        //???????FOLLOW?????????????,????????
+        //if touch type == FOLLOW, set stick position to be touch position
         if(target.getParent()._touchType == TouchType.FOLLOW)
         {
             target.getParent().setPosition(touch.getLocation());
@@ -124,16 +124,16 @@ var Joystick = cc.Node.extend({
         }
         else
         {
-            //???????????????????
+            //else set position to loc
             var touchPos = target.convertToNodeSpace(touch.getLocation());
 
-            //???????
+            //distance to target
             var distance = target.getParent()._getDistance(touchPos, target);
 
-            //????
+            //radius
             var radius = target.getBoundingBox().width / 2;
 
-            //??????????????,??true
+            //if distance smaller than radius return true
             if(radius > distance)
             {
                 target.getParent()._stick.setPosition(touchPos);
@@ -146,19 +146,14 @@ var Joystick = cc.Node.extend({
 
     onTouchMoved: function(touch, event)
     {
-        //??????
         var target = event.getCurrentTarget();
 
-        //???????????????????
         var touchPos = target.convertToNodeSpace(touch.getLocation());
 
-        //???????
         var distance = target.getParent()._getDistance(touchPos, target);
 
-        //????
         var radius = target.getBoundingBox().width / 2;
 
-        //??????????????,???????
         if(radius > distance)
         {
             target.getParent()._stick.setPosition(touchPos);
@@ -170,38 +165,33 @@ var Joystick = cc.Node.extend({
             target.getParent()._stick.setPosition(cc.p(x, y));
         }
 
-        //????
         target.getParent()._getAngle(touchPos);
 
-        //??????
         target.getParent()._setSpeed(touchPos);
 
-        //????
+        //update the callback function
         target.getParent()._updateCallback();
     },
 
     onTouchEnded: function(touch, event)
     {
-        //??????
         var target = event.getCurrentTarget();
 
-        //???????FOLLOW????????
         if(target.getParent()._touchType == TouchType.FOLLOW)
             target.getParent().setVisible(false);
 
-        //??????
+        //joystick reset position
         target.getParent()._stick.setPosition(target.getPosition());
 
         target.getParent().unscheduleUpdate();
     },
 
-    //??????
     _setSpeed: function(point)
     {
-        //????????????
+        //get touch distance to anchor
         var distance = this._getDistance(point, this._stickBG.getPosition());
 
-        //????
+        //if distance < radius...
         if(distance < this._radius)
         {
             this._speed = this._speed1;
@@ -212,7 +202,6 @@ var Joystick = cc.Node.extend({
         }
     },
 
-    //????
     _updateCallback: function()
     {
         if(this.callback && typeof(this.callback) === "function")
@@ -221,7 +210,7 @@ var Joystick = cc.Node.extend({
         }
     },
 
-    //??????
+    //update target loc
     update: function(dt)
     {
         switch (this._directionType)
@@ -240,7 +229,6 @@ var Joystick = cc.Node.extend({
         }
     },
 
-    //??????(????)
     _fourDirectionsMove: function()
     {
         if(this._angle > 45 && this._angle < 135)
@@ -261,7 +249,6 @@ var Joystick = cc.Node.extend({
         }
     },
 
-    //??????(????????????????)
     _eightDirectionsMove: function()
     {
         if(this._angle > 67.5 && this._angle < 112.5)
@@ -302,14 +289,12 @@ var Joystick = cc.Node.extend({
         }
     },
 
-    //?????
     _allDirectionsMove: function()
     {
         this._target.x += Math.cos(this._angle * (Math.PI/180)) * this._speed;
         this._target.y += Math.sin(this._angle * (Math.PI/180)) * this._speed;
     },
 
-    //?????
     setOpacity: function(opacity)
     {
         this._opacity = opacity;
@@ -317,13 +302,13 @@ var Joystick = cc.Node.extend({
         this._stickBG.setOpacity(opacity);
     },
 
-    //??????
+    //set speed1
     setSpeedwithLevel1: function(speed)
     {
         this._speed1 = speed;
     },
 
-    //??????
+    //set speed2
     setSpeedwithLevel2: function(speed)
     {
         if(this._speed1 < speed)
@@ -336,7 +321,7 @@ var Joystick = cc.Node.extend({
         }
     },
 
-    //???????
+    //enable or disable
     setEnable: function(enable)
     {
         if(this._listener != null)
@@ -352,7 +337,6 @@ var Joystick = cc.Node.extend({
         }
     },
 
-    //????
     getAngle: function()
     {
         return this._angle;

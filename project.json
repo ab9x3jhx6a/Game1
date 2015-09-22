@@ -13,7 +13,13 @@
     "jsList" : [
         "src/resource.js",
         "src/app.js",
+        "src/joystick.js",
         "src/player.js",
-        "src/joystick.js"
+        "src/enemy.js",
+        "src/playerlayer.js",
+        "src/enemylayer.js",
+        "src/bullet.js",
+        "src/gamelayer.js",
+        "src/backgroundlayer.js"
     ]
 }

@@ -1,36 +1,35 @@
 /**
  * Created by Shanye on 9/9/2015.
  */
-/*
+
 var Player = cc.Sprite.extend ({
     ctor: function () {
-        this.scheduleUpdate();
 
-        this._super(res.s1moveleft_1);
-
-        cc.spriteFrameCache.addSpriteFrame(new cc.SpriteFrame
-        (res.s1moveleft_1_png, cc.rect(0, 0, 60, 100)), "s1moveleft1");
+        this._super(res.s1moveleft1_png);
 
         cc.spriteFrameCache.addSpriteFrame(new cc.SpriteFrame
-        (res.s1moveleft_2_png, cc.rect(0, 0, 60, 100)), "s1moveleft2");
+        (res.s1moveleft1_png, cc.rect(0, 0, 35, 60)), "s1moveleft1");
 
         cc.spriteFrameCache.addSpriteFrame(new cc.SpriteFrame
-        (res.s1moveleft_3_png, cc.rect(0, 0, 60, 100)), "s1moveleft3");
+        (res.s1moveleft2_png, cc.rect(0, 0, 35, 60)), "s1moveleft2");
 
         cc.spriteFrameCache.addSpriteFrame(new cc.SpriteFrame
-        (res.s1moveleft_4_png, cc.rect(0, 0, 60, 100)), "s1moveleft4");
+        (res.s1moveleft3_png, cc.rect(0, 0, 35, 60)), "s1moveleft3");
 
         cc.spriteFrameCache.addSpriteFrame(new cc.SpriteFrame
-        (res.s1moveright_1_png, cc.rect(0, 0, 60, 100)), "s1moveright1");
+        (res.s1moveleft4_png, cc.rect(0, 0, 35, 60)), "s1moveleft4");
 
         cc.spriteFrameCache.addSpriteFrame(new cc.SpriteFrame
-        (res.s1moveright_2_png, cc.rect(0, 0, 60, 100)), "s1moveright2");
+        (res.s1moveright1_png, cc.rect(0, 0, 35, 60)), "s1moveright1");
 
         cc.spriteFrameCache.addSpriteFrame(new cc.SpriteFrame
-        (res.s1moveright_3_png, cc.rect(0, 0, 60, 100)), "s1moveright3");
+        (res.s1moveright2_png, cc.rect(0, 0, 35, 60)), "s1moveright2");
 
         cc.spriteFrameCache.addSpriteFrame(new cc.SpriteFrame
-        (res.s1moveright_4_png, cc.rect(0, 0, 60, 100)), "s1moveright4");
+        (res.s1moveright3_png, cc.rect(0, 0, 35, 60)), "s1moveright3");
+
+        cc.spriteFrameCache.addSpriteFrame(new cc.SpriteFrame
+        (res.s1moveright4_png, cc.rect(0, 0, 35, 60)), "s1moveright4");
 
         //load frames into a array
         var i,f;
@@ -55,9 +54,9 @@ var Player = cc.Sprite.extend ({
         this.leftAction = new cc.RepeatForever(new cc.Animate(leftAnim));
         this.rightAction = new cc.RepeatForever(new cc.Animate(rightAnim));
 
+        //this.runAction(this.rightAction);
 
         return true;
-    },
+    }
 
 });
-*/
