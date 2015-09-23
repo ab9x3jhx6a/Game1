@@ -80,24 +80,20 @@ var GameLayer = cc.Layer.extend({
 
     update:function (dt) {
         this.win+=dt;
-        if(this.win>100){//win condition
-            this.pausetimer += dt;
+        if(this.win>10){//win condition
             this.winscreen = new cc.Sprite(res.cutscene2_png);
             this.winscreen.setAnchorPoint(0,0);
             this.winscreen.setLocalZOrder(6);
             this.winscreen.setScale(1.1);
             this.winscreen.x = 0;
             this.winscreen.y = 0;
+            //this.removeAllChildren();
             this.addChild(this.winscreen);
 
-            this.getParent().pause();
-            this.getParent().bglayer.pause();
-            cc.audioEngine.stopAllEffects();
-            cc.audioEngine.stopMusic();
-            //this.pause();
-            if(this.pausetimer > 3){
-                this.ToThree();
-            }
+            //cc.audioEngine.pauseMusic();
+            cc.audioEngine.pauseAllEffects();
+
+            this.ToThree();
         }
 
         //updates for player

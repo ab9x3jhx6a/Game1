@@ -178,14 +178,14 @@ cc.spriteFrameCache.addSpriteFrames(res.BossAng3Idle_plist);
     var animFramesBa3i = [];
     for (var i = 1; i < 3; i++) {
         var str = "ba3i" + i + ".png";
-        var spriteFrameBa3i = cc.spriteFrameCache.getSpriteFrame(str);
+        var spriteFrameBa3i = new cc.spriteFrameCache.getSpriteFrame(str);
         var animFrameBa3i = new cc.AnimationFrame();
         animFrameBa3i.initWithSpriteFrame(spriteFrameBa3i, 1, null);
         animFramesBa3i.push(animFrameBa3i);
     }
     
-    var animationBa3i = cc.Animation.create(animFramesBa3i, 0.5);
-    this.animateBa3i = cc.Animate.create(animationBa3i); 
+    var animationBa3i = new cc.Animation(animFramesBa3i, 0.5);
+    this.animateBa3i = new cc.Animate.(animationBa3i);
 /////////////////////////////////////////////////////////////////////////////////
 cc.spriteFrameCache.addSpriteFrames(res.BossAng3Throw_plist);
     var ba3tTexture = cc.textureCache.addImage(res.BossAng3Throw_png),
@@ -209,7 +209,7 @@ cc.spriteFrameCache.addSpriteFrames(res.BossAng3Throw_plist);
     this.sprite = new cc.Sprite(res.lv1_background_png);
         this.sprite.attr({
             x: cc.winSize.width / 2,
-            y: cc.winSize.height / 2,
+            y: cc.winSize.height / 2
             
         });
         this.addChild(this.sprite, 0);
@@ -217,7 +217,7 @@ cc.spriteFrameCache.addSpriteFrames(res.BossAng3Throw_plist);
     this.bgframe = new cc.Sprite(res.frame_png);
         this.bgframe.attr({
             x: cc.winSize.width / 2,
-            y: cc.winSize.height / 2,
+            y: cc.winSize.height / 2
             
         });
         this.addChild(this.bgframe, 4);
@@ -228,10 +228,10 @@ cc.spriteFrameCache.addSpriteFrames(res.BossAng3Throw_plist);
 
    
     
-    this.papers = new Array();
+    this.papers = [];
     for (var b=0;b<15;b++){
         
-        this.paper = cc.Sprite.create(res.paperFalling_png);  
+        this.paper = new cc.Sprite(res.paperFalling_png);
         this.papers.push(this.paper);      
         this.paper.attr({
             x: this.getRandomInt(this.mini,this.maxi),
@@ -243,17 +243,17 @@ cc.spriteFrameCache.addSpriteFrames(res.BossAng3Throw_plist);
     }
    
 
-    this.person = cc.Sprite.create(res.rest_png);        
+    this.person = new cc.Sprite.(res.rest_png);
     this.person.attr({
         x: cc.winSize.width / 2,
-        y: cc.winSize.height -400,
+        y: cc.winSize.height -400
         
     });
     this.addChild(this.person, 3);
 
     cc.spriteFrameCache.addSpriteFrames(res.left_plist);
     var leftTexture = cc.textureCache.addImage(res.left_png),
-        leftImages  = cc.SpriteBatchNode.create(leftTexture);
+        leftImages  = new cc.SpriteBatchNode.(leftTexture);
     this.addChild(leftImages);
 
    
@@ -276,7 +276,7 @@ cc.spriteFrameCache.addSpriteFrames(res.BossAng3Throw_plist);
 
     cc.spriteFrameCache.addSpriteFrames(res.right_plist);
     var rightTexture = cc.textureCache.addImage(res.right_png),
-        rightImages  = cc.SpriteBatchNode.create(rightTexture);
+        rightImages  = new cc.SpriteBatchNode(rightTexture);
     this.addChild(rightImages);
 
     var animFramesRight= [];
@@ -288,8 +288,8 @@ cc.spriteFrameCache.addSpriteFrames(res.BossAng3Throw_plist);
         animFramesRight.push(animFrameRight);
     }
 
-    var animationRight = cc.Animation.create(animFramesRight, 0.08);
-    var animateRight   = cc.Animate.create(animationRight); 
+    var animationRight = new cc.Animation(animFramesRight, 0.08);
+    var animateRight   = new cc.Animate(animationRight);
 
 
      cc.eventManager.addListener({
@@ -346,6 +346,7 @@ cc.spriteFrameCache.addSpriteFrames(res.BossAng3Throw_plist);
     },
 
 ToTwo:function (){
+    //cc.director.popScene();
     var level2 = new SceneTwo();
     cc.director.pushScene(new cc.TransitionFade(3,level2));
 },
@@ -438,7 +439,7 @@ BossThrow:function(){
         this.boss.runAction(seq2);
     }
     else if (boss_anger==3){
-        var seq3 = cc.Sequence.create(this.animateBa3t,cc.Repeate.create(this.animateBa3i,20));
+        var seq3 = cc.Sequence.create(this.animateBa3t,cc.Repeat.create(this.animateBa3i,20));
         this.boss.stopAllActions();
         this.boss.runAction(seq3);
     }
@@ -483,7 +484,7 @@ PaperFall:function(dt){
         
     }
 
-    if(papers_dropped == 41){
+    if(papers_dropped == 1){
         cc.audioEngine.pauseMusic();
         cc.audioEngine.playEffect(res.victory);
         this.win = new cc.Sprite(res.cutscene1_png);
@@ -494,11 +495,10 @@ PaperFall:function(dt){
                 });
         this.win.setScale(1);
         this.addChild(this.win, 5);
-        this.stopAllActions();
-        this.pause();
-        this.getParent().pause();
+
         //this.getParent().pause();
         this.ToTwo();
+        //this.removeAllChildrenWithCleanup();
         //this.runAction(new cc.Sequence(cc.delayTime(3), cc.callFunc(this.ToTwo)));
     }
 }
