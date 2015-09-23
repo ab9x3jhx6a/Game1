@@ -1,31 +1,13 @@
 
 
-var SceneTwo = cc.Scene.extend({
+/*var SceneOne = cc.Scene.extend({
     onEnter:function () {
-        this._super();
 
-
-
-        //add background
-        this.bglayer = new BackgroundLayer();
-        this.bglayer.setGlobalZOrder(0);
-        this.addChild(this.bglayer);
-
-        //add gamelayer
-        var gamelayer = new GameLayer();
-        gamelayer.setGlobalZOrder(1);
-        this.addChild(gamelayer);
-    }
-});
-
-var SceneOne = cc.Scene.extend({
-    onEnter:function () {
         this._super();
         var Watch = new WatchLayer(this);
         this.addChild(Watch,0);
         var Player = new PlayerLayer(this);
         this.addChild(Player,0);
-
 
         this.reset = function(){
             this.removeAllChildren();
@@ -38,6 +20,22 @@ var SceneOne = cc.Scene.extend({
 
     }
 
+});*/
+
+var SceneTwo = cc.Scene.extend({
+    onEnter:function () {
+        this._super();
+
+        //add background
+        this.bglayer = new BackgroundLayer();
+        this.bglayer.setGlobalZOrder(0);
+        this.addChild(this.bglayer);
+
+        //add gamelayer
+        var gamelayer = new GameLayer();
+        gamelayer.setGlobalZOrder(1);
+        this.addChild(gamelayer);
+    }
 });
 
 var SceneThree = cc.Scene.extend({

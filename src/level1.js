@@ -5,6 +5,7 @@ var papers_dropped=0;
 var num=0;
 var paper_speed = 2.5;
 var lose_game=false;
+var size = cc.winSize;
 
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -41,8 +42,6 @@ var PlayerLayer = cc.Layer.extend({
 
     cc.audioEngine.playMusic(res.scene1, true);
 
-    
-    var size = cc.winSize;
 
     this.desk = new cc.Sprite(res.desk_png);
         this.desk.attr({
@@ -341,8 +340,13 @@ cc.spriteFrameCache.addSpriteFrames(res.BossAng3Throw_plist);
    this.scheduleUpdate();
    this.schedule(this.functionCallback,paper_speed);
    
-return true;
+        return true;
     },
+
+ToTwo:function (){
+    var level2 = new SceneTwo();
+    cc.director.pushScene(level2);
+},
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 update:function(dt){
     this.CheckCollisions();
@@ -477,20 +481,22 @@ PaperFall:function(){
         
     }
 
-    if(papers_dropped == 40){
+    if(papers_dropped == 2){
+        this.ToTwo();
         cc.audioEngine.stopMusic();
         cc.audioEngine.playEffect(res.victory);
-          this.pause();
+        this.pause();
         this.win = new cc.Sprite(res.winscreen_png);
                 this.win.attr({
                     x: size.width /2,
                     y: size.height /2
                 });
-            this.addChild(this.win, 5);
+        this.addChild(this.win, 5);
+
+
     }
 }
-},
-
+}
      
 });
 

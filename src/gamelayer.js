@@ -68,27 +68,37 @@ var GameLayer = cc.Layer.extend({
         this.framegenerate = 0;
         this.doorgenerate = 0;
         this.win = 0;
+        this.pausetimer = 0;
 
         return true;
     },
 
     ToThree:function (){
         var level3 = new SceneThree();
-        cc.director.pushScene(level3);
+        cc.director.pushScene(new cc.TransitionFade(3, level3));
     },
 
     update:function (dt) {
 
         this.win+=dt;
-        if(this.win>5){
+        if(this.win>5){//win condition
+            this.pausetimer += dt;
+            this.winscreen = new cc.Sprite(res.winscreen_png);
+            this.winscreen.setAnchorPoint(0,0);
+            this.winscreen.setLocalZOrder(6);
+            this.winscreen.setScale(1.2);
+            this.winscreen.x = 0;
+            this.winscreen.y = 0;
+            this.addChild(this.winscreen);
 
-            this.ToThree();
-            /*this.getParent().pause();
-            this.getParent().bglayer.pause();
-            this.audioEngine.stopAllEffects()();
-            this.audioEngine.stopMusic();
-            this.pause();*/
-
+            //this.getParent().pause();
+            //this.getParent().bglayer.pause();
+            cc.audioEngine.stopAllEffects();
+            cc.audioEngine.stopMusic();
+            //this.pause();
+            if(this.pausetimer > 3){
+                this.ToThree();
+            }
 
         }
 
@@ -419,7 +429,15 @@ var GameLayer = cc.Layer.extend({
                     this.bullets.splice(i, 1);
                     this.playerhealth -= 10;
                     if(this.playerhealth === 0){
-                        //end the game or load the fail screen
+                        cc.audioEngine.stopAllEffects();
+                        cc.audioEngine.stopMusic();
+                        var fail = new cc.Sprite(res.failscreen_png);
+                        fail.setAnchorPoint(0,0);
+                        fail.setLocalZOrder(6);
+                        fail.winscreen.setScale(1.2);
+                        fail.x = 0;
+                        fail.y = 0;
+                        this.addChild(fail);
                     }
                 }
             }

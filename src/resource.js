@@ -133,7 +133,6 @@ var res = {
     fail_sound : "res/level3/Sound/fail.mp3",
     win_sound : "res/level3/Sound/victory.mp3",
 
-
     //fail & win screen
     winscreen_png : "res/winscreen.png",
     failscreen_png : "res/failscreen.png",
