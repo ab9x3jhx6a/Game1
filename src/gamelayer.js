@@ -9,7 +9,7 @@ var GameLayer = cc.Layer.extend({
 
         this._super();
 
-        //sound
+        // sound
         cc.audioEngine.playMusic(res.scene2_ogg, true);
 
         // add player
@@ -20,8 +20,8 @@ var GameLayer = cc.Layer.extend({
         this.player.y = 0;
         this.player.setScale(1.5);
         this.player.setLocalZOrder(2);
-        //player stats
-        this.playerhealth = 50;
+        // player stats
+        this.playerhealth = 20;
         this.playerscore = 0;
 
         // add joystick
@@ -79,27 +79,25 @@ var GameLayer = cc.Layer.extend({
     },
 
     update:function (dt) {
-
         this.win+=dt;
-        if(this.win>5){//win condition
+        if(this.win>100){//win condition
             this.pausetimer += dt;
-            this.winscreen = new cc.Sprite(res.winscreen_png);
+            this.winscreen = new cc.Sprite(res.cutscene2_png);
             this.winscreen.setAnchorPoint(0,0);
             this.winscreen.setLocalZOrder(6);
-            this.winscreen.setScale(1.2);
+            this.winscreen.setScale(1.1);
             this.winscreen.x = 0;
             this.winscreen.y = 0;
             this.addChild(this.winscreen);
 
-            //this.getParent().pause();
-            //this.getParent().bglayer.pause();
+            this.getParent().pause();
+            this.getParent().bglayer.pause();
             cc.audioEngine.stopAllEffects();
             cc.audioEngine.stopMusic();
             //this.pause();
             if(this.pausetimer > 3){
                 this.ToThree();
             }
-
         }
 
         //updates for player
@@ -129,6 +127,7 @@ var GameLayer = cc.Layer.extend({
             this.gap = 0;
         }
 
+        //retarget the player loc once a while
         this.retarget += dt;
         if(this.retarget >= this.randomretarget){
             cc.audioEngine.playEffect(res.step_wav,false);
@@ -169,17 +168,17 @@ var GameLayer = cc.Layer.extend({
 
             //lights
         this.lightgenerate += dt;
-        if(this.lightgenerate > 31){//31
+        if(this.lightgenerate > 31){//31 this is relative prime to the number below
             this.lightgenerate = 0;
             this.GenerateLight();
         }
             //doors
         this.doorgenerate += dt;
-        if(this.doorgenerate > 49){//49
+        if(this.doorgenerate > 49){//49 this the "number below"
             this.doorgenerate = 0;
             this.GenerateDoor();
         }
-            //frames ---- took this out, it's buggy
+            //frames ---- took this out, it was buggy
         /*this.framegenerate += dt;
         if(this.framegenerate > 73){//73
             this.framegenerate = 0;
@@ -214,6 +213,7 @@ var GameLayer = cc.Layer.extend({
         this.objects.push(n_object);
     },
 
+    //not used
     GenerateFrame:function(){
         var n_object = new cc.Sprite(res.goldenframe_png);
         n_object.setAnchorPoint(cc.p(0,0));
@@ -250,6 +250,7 @@ var GameLayer = cc.Layer.extend({
         this.desks.push(n_object);
     },
 
+    //not used
     EnemyDodgeObject:function(){
         var i;
         for(i=0; i<this.objects.length;i++){
@@ -259,6 +260,7 @@ var GameLayer = cc.Layer.extend({
         }
     },
 
+    //move enemy based on retarget function
     MoveEnemy:function(){
         var dy = Math.random() * 20;
         if(dy>10){
@@ -269,6 +271,7 @@ var GameLayer = cc.Layer.extend({
         }
     },
 
+    //move and get rid of objects that are off-screen
     MoveObjects:function() {
         var i;
         for(i=0; i<this.objects.length;i++){
@@ -288,6 +291,7 @@ var GameLayer = cc.Layer.extend({
         }
     },
 
+    //check collision between obstacles and player
     DetectObjectCollision:function(){
         var i;
         for(i=0; i<this.objects.length;i++){
@@ -313,7 +317,7 @@ var GameLayer = cc.Layer.extend({
                     this.player.x = this.objects[i].x-45;
                 }
             }
-            //y axis detection makes the gameplay annoying, so i took it off.
+            //y axis detection makes the gameplay annoying, so i took it off. #NOTBEINGLAZY
         }
 
         //desks
@@ -341,10 +345,11 @@ var GameLayer = cc.Layer.extend({
                     this.player.x = this.desks[j].x-45;
                 }
             }
-            //y axis detection makes the gameplay annoying, so i took it off.
+            //y axis detection makes the gameplay annoying, so i took it off. #NOTBEINGLAZYATALL
         }
     },
 
+    //check which way the player is facing
     CheckDirection:function() {
         //check joystick angle
         if((this.joystick._angle >=90 && this.joystick._angle < 180) || (this.joystick._angle <= -90 && this.joystick._angle > -180)) {
@@ -367,6 +372,7 @@ var GameLayer = cc.Layer.extend({
         }
     },
 
+    //boundary collision for player
     CheckCollisions:function() {
         var minx = 180;
         var miny = 5;
@@ -386,6 +392,7 @@ var GameLayer = cc.Layer.extend({
         }
     },
 
+    //enemy shoot bullet, create bullet sprite, player sound effect
     ShootBullet:function(){
         //create a new bullet
         var n_bullet = new Bullet();
@@ -400,6 +407,7 @@ var GameLayer = cc.Layer.extend({
         this.enemy.runAction((this.enemy.shootAct));
     },
 
+    //move bullets and get rid of bullets that are off-screen
     Flybullets:function(){
         var i;
         for(i=0;i<this.bullets.length;i++){
@@ -420,6 +428,8 @@ var GameLayer = cc.Layer.extend({
         }
     },
 
+
+    //detect collision between player and bullets, minus player health and triggers fail condition
     Bullethit:function(){
         var i;
         for(i=0;i<this.bullets.length;i++){
@@ -434,7 +444,7 @@ var GameLayer = cc.Layer.extend({
                         var fail = new cc.Sprite(res.failscreen_png);
                         fail.setAnchorPoint(0,0);
                         fail.setLocalZOrder(6);
-                        fail.winscreen.setScale(1.2);
+                        fail.setScale(1.2);
                         fail.x = 0;
                         fail.y = 0;
                         this.addChild(fail);

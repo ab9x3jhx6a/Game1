@@ -1,29 +1,28 @@
 
 
-/*var SceneOne = cc.Scene.extend({
+var SceneOne = cc.Scene.extend({
     onEnter:function () {
-
+        cc.view.setDesignResolutionSize(960, 680, cc.ResolutionPolicy.SHOW_ALL);
         this._super();
         var Watch = new WatchLayer(this);
         this.addChild(Watch,0);
-        var Player = new PlayerLayer(this);
+        var Player = new L1PlayerLayer(this);
         this.addChild(Player,0);
 
         this.reset = function(){
             this.removeAllChildren();
             var Watch = new WatchLayer(this);
             this.addChild(Watch,0);
-            var Player = new PlayerLayer(this);
+            var Player = new L1PlayerLayer(this);
             this.addChild(Player,0);
-
         };
-
     }
-
-});*/
+});
 
 var SceneTwo = cc.Scene.extend({
     onEnter:function () {
+
+        cc.view.setDesignResolutionSize(800, 450, cc.ResolutionPolicy.SHOW_ALL);
         this._super();
 
         //add background
@@ -42,6 +41,7 @@ var SceneThree = cc.Scene.extend({
     onEnter:function () {
         this._super();
 
+        cc.view.setDesignResolutionSize(800, 450, cc.ResolutionPolicy.SHOW_ALL);
         var layer = new HelloWorldLayer(this);
         this.addChild(layer, 0);
         this.obstacles = new ObstacleLayer(this);
@@ -53,7 +53,6 @@ var SceneThree = cc.Scene.extend({
         this.game_overf = function(){
             this.game_over = true;
         };
-
 
         this.reset = function(){
             this.removeAllChildren();

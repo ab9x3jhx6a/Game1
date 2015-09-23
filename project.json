@@ -2,7 +2,7 @@
     "project_type": "javascript",
 
     "debugMode" : 1,
-    "showFPS" : true,
+    "showFPS" : false,
     "frameRate" : 60,
     "id" : "gameCanvas",
     "renderMode" : 0,
@@ -19,9 +19,9 @@
         "src/bullet.js",
         "src/gamelayer.js",
         "src/backgroundlayer.js",
-        "src/background.js",
+        "src/lv3background.js",
         "src/level3.js",
-        "src/obstacle.js",
+        "src/lv3obstacle.js",
         "src/lv3player.js",
         "src/level1.js"
     ]

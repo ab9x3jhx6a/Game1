@@ -32,7 +32,7 @@ var WatchLayer = cc.Layer.extend({
 
 });
 
-var PlayerLayer = cc.Layer.extend({
+var L1PlayerLayer = cc.Layer.extend({
     spriteSheet:null,
     runningAction:null,
     sprite:null,
@@ -40,21 +40,23 @@ var PlayerLayer = cc.Layer.extend({
     ctor:function () {
     this._super();
 
+        this.wintimer = 0;
+
     cc.audioEngine.playMusic(res.scene1, true);
 
 
-    this.desk = new cc.Sprite(res.desk_png);
+    this.desk = new cc.Sprite(res.lv1_desk_png);
         this.desk.attr({
-            x: size.width / 2,
-            y: size.height -390,
+            x: cc.winSize.width / 2,
+            y:cc.winSize.height -390,
             
         });
         this.addChild(this.desk, 2);
 
     this.boss = cc.Sprite.create(res.bni1_png);        
     this.boss.attr({
-        x: size.width / 2,
-        y: size.height -360,
+        x: cc.winSize.width / 2,
+        y: cc.winSize.height -360,
         
     });
     this.addChild(this.boss, 1);
@@ -204,25 +206,25 @@ cc.spriteFrameCache.addSpriteFrames(res.BossAng3Throw_plist);
     this.animateBa3t = cc.Animate.create(animationBa3t); 
 /////////////////////////////////////////////////////////////////////////////////
 
-    this.sprite = new cc.Sprite(res.background_png);
+    this.sprite = new cc.Sprite(res.lv1_background_png);
         this.sprite.attr({
-            x: size.width / 2,
-            y: size.height / 2,
+            x: cc.winSize.width / 2,
+            y: cc.winSize.height / 2,
             
         });
         this.addChild(this.sprite, 0);
 
     this.bgframe = new cc.Sprite(res.frame_png);
         this.bgframe.attr({
-            x: size.width / 2,
-            y: size.height / 2,
+            x: cc.winSize.width / 2,
+            y: cc.winSize.height / 2,
             
         });
         this.addChild(this.bgframe, 4);
    
-   this.mini = size.width/2-190;
-    this.maxi = size.width/2+190;
-    this.low = size.height/2-110;
+   this.mini = cc.winSize.width/2-190;
+    this.maxi = cc.winSize.width/2+190;
+    this.low = cc.winSize.height/2-110;
 
    
     
@@ -233,7 +235,7 @@ cc.spriteFrameCache.addSpriteFrames(res.BossAng3Throw_plist);
         this.papers.push(this.paper);      
         this.paper.attr({
             x: this.getRandomInt(this.mini,this.maxi),
-            y: size.height-200
+            y: cc.winSize.height-200
         });
 
         this.addChild(this.paper, 3);
@@ -243,8 +245,8 @@ cc.spriteFrameCache.addSpriteFrames(res.BossAng3Throw_plist);
 
     this.person = cc.Sprite.create(res.rest_png);        
     this.person.attr({
-        x: size.width / 2,
-        y: size.height -400,
+        x: cc.winSize.width / 2,
+        y: cc.winSize.height -400,
         
     });
     this.addChild(this.person, 3);
@@ -295,7 +297,7 @@ cc.spriteFrameCache.addSpriteFrames(res.BossAng3Throw_plist);
             onKeyPressed: function(keyCode, event) {
                 var target = event.getCurrentTarget();
                 
-                if (keyCode == cc.KEY.left && target.getPosition().x-15>size.width/2-190) {
+                if (keyCode == cc.KEY.left && target.getPosition().x-15>cc.winSize.width/2-190) {
                     cc.log("left");
                     if (count==0){
                         target.runAction(
@@ -309,7 +311,7 @@ cc.spriteFrameCache.addSpriteFrames(res.BossAng3Throw_plist);
                     ++count;
                     
                 }
-                if (keyCode == cc.KEY.right && target.getPosition().x+15<size.width/2+190) {
+                if (keyCode == cc.KEY.right && target.getPosition().x+15<cc.winSize.width/2+190) {
                     cc.log("right");
                     if (count==0){
                         target.runAction(
@@ -345,7 +347,7 @@ cc.spriteFrameCache.addSpriteFrames(res.BossAng3Throw_plist);
 
 ToTwo:function (){
     var level2 = new SceneTwo();
-    cc.director.pushScene(level2);
+    cc.director.pushScene(new cc.TransitionFade(3,level2));
 },
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 update:function(dt){
@@ -353,7 +355,7 @@ update:function(dt){
 },
 
 functionCallback:function(dt){
-    this.PaperFall();
+    this.PaperFall(dt);
 },
 
     CheckCollisions:function(){
@@ -385,8 +387,8 @@ functionCallback:function(dt){
             //this.pause();
             this.fail = new cc.Sprite(res.failscreen_png);
                 this.fail.attr({
-                    x: size.width /2,
-                    y: size.height /2
+                    x: cc.winSize.width /2,
+                    y: cc.winSize.height /2
                 });
             this.addChild(this.fail, 7);
             //this.resume();
@@ -446,7 +448,7 @@ getRandomInt:function(mini,maxi) {
     return Math.floor(Math.random() * (maxi - mini + 1)) + mini;
 },
 
-PaperFall:function(){
+PaperFall:function(dt){
     cc.log("num: ",num);
     if (boss_anger==4){
     
@@ -481,19 +483,23 @@ PaperFall:function(){
         
     }
 
-    if(papers_dropped == 2){
-        this.ToTwo();
-        cc.audioEngine.stopMusic();
+    if(papers_dropped == 41){
+        cc.audioEngine.pauseMusic();
         cc.audioEngine.playEffect(res.victory);
-        this.pause();
-        this.win = new cc.Sprite(res.winscreen_png);
+        this.win = new cc.Sprite(res.cutscene1_png);
+        //this.win.setAnchorPoint(new cc.p(0,0));
                 this.win.attr({
-                    x: size.width /2,
-                    y: size.height /2
+                    x: cc.winSize.width/2 - 100,
+                    y: cc.winSize.height/2 - 100
                 });
+        this.win.setScale(1);
         this.addChild(this.win, 5);
-
-
+        this.stopAllActions();
+        this.pause();
+        this.getParent().pause();
+        //this.getParent().pause();
+        this.ToTwo();
+        //this.runAction(new cc.Sequence(cc.delayTime(3), cc.callFunc(this.ToTwo)));
     }
 }
 }

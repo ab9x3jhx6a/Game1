@@ -177,14 +177,14 @@ var PlayerLayer = cc.Layer.extend({
                 event: cc.EventListener.KEYBOARD,
                 onKeyPressed: function (key, event) {
                     var target = event.getCurrentTarget();
-                    if (key == cc.KEY.w) {
+                    if (key == cc.KEY.up) {
                         if (isJumping == false && isCrouching == false) {
                             target.person.stopActionByTag(1);
                             target.person.runAction(target.jumper);
                             target.person.runAction(target.jumpingAction);
                         }
                     }
-                    if (key == cc.KEY.s){
+                    if (key == cc.KEY.down){
                         if (isCrouching == false && isJumping == false){
                             target.person.stopActionByTag(1);
                             target.person.runAction(target.crouchdown);
@@ -197,7 +197,7 @@ var PlayerLayer = cc.Layer.extend({
                 event: cc.EventListener.KEYBOARD,
                 onKeyReleased: function (key, event) {
                     var target = event.getCurrentTarget();
-                    if (key == cc.KEY.s){
+                    if (key == cc.KEY.down){
                         if (isCrouching == true){
                             target.person.runAction(target.crouchup);
                             resumerunning(target.person);
