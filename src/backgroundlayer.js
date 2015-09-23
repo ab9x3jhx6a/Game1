@@ -20,35 +20,40 @@ var BackgroundLayer = cc.Layer.extend({
         this.background.x = 0;
         this.background.y = 0;
 
+        this.background1 = new cc.Sprite(res.background1_png);
+        this.background1.setAnchorPoint(cc.p(0,0));
+        this.background1.x = 1250;
+        this.background1.y = 0;
+
         this.backgrounds = [];
 
         this.addChild(this.background);
+        this.addChild(this.background1);
         this.backgrounds.push(this.background);
+        this.backgrounds.push(this.background1);
 
         return true;
     },
 
     update:function(dt){
         this.MoveBackgrounds();
-
-
     },
 
     MoveBackgrounds:function(){
         var i;
-        for(i=0;i<this.backgrounds.length;i++){
-            this.backgrounds[i].setLocalZOrder(-4);
-            this.backgrounds[i].x -= 2;
-            if(this.backgrounds[i].x < -900){
-                var n_background = new cc.Sprite(res.background1_png);
-                n_background.setAnchorPoint(cc.p(0,0));
-                n_background.x = 300;
-                n_background.y = 0;
-                this.removeChild(this.backgrounds[i]);
-                this.backgrounds.splice(i, 1);
-                this.backgrounds.push(n_background);
-                this.addChild(n_background);
-            }
+        this.backgrounds[0].setLocalZOrder(-4);
+        this.backgrounds[1].setLocalZOrder(-4);
+        this.backgrounds[0].x -= 2;
+        this.backgrounds[1].x -= 2;
+        if(this.backgrounds[0].x < -1249){
+            var n_background = new cc.Sprite(res.background1_png);
+            n_background.setAnchorPoint(cc.p(0,0));
+            n_background.x = 1249;
+            n_background.y = 0;
+            this.removeChild(this.backgrounds[0]);
+            this.backgrounds.splice(0, 1);
+            this.backgrounds.push(n_background);
+            this.addChild(n_background);
         }
     }
 

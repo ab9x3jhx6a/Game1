@@ -46,7 +46,10 @@ var res = {
     goldenframe_png: "res/object/goldenframe.png",
 
     //sound
-    scene2_ogg : "res/sound/BGM/scene2.ogg"
+    scene2_ogg : "res/sound/BGM/scene2.ogg",
+    gun_wav: "res/sound/scene2/gun.wav",
+    gunfire_wav: "res/sound/scene2/gunfire.wav",
+    step_wav: "res/sound/scene2/step.wav"
 
 };
 

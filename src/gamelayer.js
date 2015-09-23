@@ -12,14 +12,6 @@ var GameLayer = cc.Layer.extend({
         //sound
         cc.audioEngine.playMusic(res.scene2_ogg, true);
 
-
-        // add background
-        /*this.background = new cc.Sprite(res.background1_png);
-        this.background.setAnchorPoint(cc.p(0,0));
-        this.background.x = 0;
-        this.background.y = 0;
-        this.addChild(this.background);*/
-
         // add player
         this.player = new Player();
         this.addChild(this.player);
@@ -56,7 +48,8 @@ var GameLayer = cc.Layer.extend({
 
         //objects
         this.bullets = [];
-        this.objects = [];//barrels and crates
+        this.objects = [];//clocks, lights and doors
+        this.desks = [];
 
         //timers
         this.gap = 0;//timer for shooting
@@ -93,21 +86,23 @@ var GameLayer = cc.Layer.extend({
         }
         this.CheckCollisions();
 
-        //updates for enemy
+        //updates for enemy and if the bullets hit player
         //this.EnemyDodgeObject();
-        this.flybullets();
+        this.Flybullets();
+        this.Bullethit();
 
         this.gap += dt;
 
         if(this.gap > this.randomshoot){
             this.randomshoot = Math.random() * 5 + 1;
+            //cc.audioEngine.playEffect(res.gun_wav,false);
             this.ShootBullet();
             this.gap = 0;
         }
 
         this.retarget += dt;
         if(this.retarget >= this.randomretarget){
-
+            cc.audioEngine.playEffect(res.step_wav,false);
             var i,j;
             if(this.player.y > this.enemy.y){
                 var dur0 = Math.random()*(this.player.y - this.enemy.y)/10;
@@ -155,12 +150,12 @@ var GameLayer = cc.Layer.extend({
             this.doorgenerate = 0;
             this.GenerateDoor();
         }
-            //frames
-        this.framegenerate += dt;
+            //frames ---- took this out, it's buggy
+        /*this.framegenerate += dt;
         if(this.framegenerate > 73){//73
             this.framegenerate = 0;
             this.GenerateFrame();
-        }
+        }*/
 
         this.MoveObjects();
         this.DetectObjectCollision();
@@ -223,7 +218,7 @@ var GameLayer = cc.Layer.extend({
         n_object.setLocalZOrder(0);
 
         this.addChild(n_object);
-        this.objects.push(n_object);
+        this.desks.push(n_object);
     },
 
     EnemyDodgeObject:function(){
@@ -254,6 +249,14 @@ var GameLayer = cc.Layer.extend({
                 this.objects.splice(i,1);
             }
         }
+        var j;
+        for(j=0;j<this.desks.length;j++){
+            this.desks[j].x -= 2;
+            if(this.desks[j].x < -200){
+                this.removeChild((this.desks[j]));
+                this.desks.splice(j,1);
+            }
+        }
     },
 
     DetectObjectCollision:function(){
@@ -264,7 +267,7 @@ var GameLayer = cc.Layer.extend({
                 this.objects[i].setLocalZOrder(3);
             }
             if(this.player.y<=this.objects[i].y){
-                this.objects[i].setLocalZOrder(1);
+                this.objects[i].setLocalZOrder(0);
             }
             //z order for enemy
             if(this.objects[i].x <= 180) {
@@ -272,13 +275,41 @@ var GameLayer = cc.Layer.extend({
                     this.objects[i].setLocalZOrder(3);
                 }
                 if (this.enemy.y <= this.objects[i].y) {
-                    this.objects[i].setLocalZOrder(1);
+                    this.objects[i].setLocalZOrder(0);
                 }
             }
             //collision detection x axis for player
             if(this.player.y < this.objects[i].y  + 25 && this.player.y > this.objects[i].y){
                 if(this.player.x < this.objects[i].x && this.player.x + 55 > this.objects[i].x){
                     this.player.x = this.objects[i].x-45;
+                }
+            }
+            //y axis detection makes the gameplay annoying, so i took it off.
+        }
+
+        //desks
+        var j;
+        for(j=0; j<this.desks.length;j++){
+            //change z order first
+            if(this.player.y>=this.desks[j].y + 5){
+                this.desks[j].setLocalZOrder(4);
+            }
+            if(this.player.y<=this.desks[j].y){
+                this.desks[j].setLocalZOrder(1);
+            }
+            //z order for enemy
+            if(this.desks[j].x <= 180) {
+                if (this.enemy.y >= this.desks[j].y + 5) {
+                    this.desks[j].setLocalZOrder(4);
+                }
+                if (this.enemy.y <= this.desks[j].y) {
+                    this.desks[j].setLocalZOrder(1);
+                }
+            }
+            //collision detection x axis for player
+            if(this.player.y < this.desks[j].y  + 25 && this.player.y > this.desks[j].y){
+                if(this.player.x < this.desks[j].x && this.player.x + 55 > this.desks[j].x){
+                    this.player.x = this.desks[j].x-45;
                 }
             }
             //y axis detection makes the gameplay annoying, so i took it off.
@@ -329,22 +360,49 @@ var GameLayer = cc.Layer.extend({
     ShootBullet:function(){
         //create a new bullet
         var n_bullet = new Bullet();
-        n_bullet.x = this.enemy.x+115;
-        n_bullet.y = this.enemy.y+70;
+        n_bullet.setAnchorPoint(cc.p(0,0));
+        n_bullet.x = this.enemy.x+105;
+        n_bullet.y = this.enemy.y+65;
 
+        cc.audioEngine.playEffect(res.gunfire_wav, false);
         this.bullets.push(n_bullet);
         this.addChild(n_bullet);
 
         this.enemy.runAction((this.enemy.shootAct));
     },
 
-    flybullets:function(){
+    Flybullets:function(){
         var i;
         for(i=0;i<this.bullets.length;i++){
+
+            if(this.bullets[i].y > this.player.y + 80){
+                this.bullets[i].setLocalZOrder(2);
+            }
+
+            if(this.bullets[i].y < this.player.y + 50){
+                this.bullets[i].setLocalZOrder(5);
+            }
+
             this.bullets[i].x += 4;
             if(this.bullets[i].x >= 900){
                 this.removeChild(this.bullets[i]);
                 this.bullets.splice(i,1);
+            }
+        }
+    },
+
+    Bullethit:function(){
+        var i;
+        for(i=0;i<this.bullets.length;i++){
+           if(this.bullets[i].x < this.player.x + 10 && this.bullets[i].x > this.player.x - 10){
+                if (this.bullets[i].y > this.player.y + 50 && this.bullets[i].y < this.player.y + 80) {
+                    this.removeChild(this.bullets[i]);
+                    this.bullets.splice(i, 1);
+                    this.playerhealth -= 10;
+                    if(this.playerhealth === 0){
+                        //end the game or load the fail screen
+                    }
+                }
             }
         }
     }
