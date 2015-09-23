@@ -69,6 +69,7 @@ var res = {
 
     bni1_png : "res/level1/bni1.png",
 
+
     BossNormIdle_png : "res/level1/BossNormIdle.png",
     BossNormIdle_plist : "res/level1/BossNormIdle.plist",
     BossNormThrow_png : "res/level1/BossNormThrow.png",
