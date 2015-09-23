@@ -16,10 +16,13 @@
         "src/joystick.js",
         "src/player.js",
         "src/enemy.js",
-        "src/playerlayer.js",
-        "src/enemylayer.js",
         "src/bullet.js",
         "src/gamelayer.js",
-        "src/backgroundlayer.js"
+        "src/backgroundlayer.js",
+        "src/background.js",
+        "src/level3.js",
+        "src/obstacle.js",
+        "src/lv3player.js",
+        "src/level1.js"
     ]
 }

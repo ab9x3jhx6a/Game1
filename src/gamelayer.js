@@ -67,11 +67,30 @@ var GameLayer = cc.Layer.extend({
         this.lightgenerate = 0;
         this.framegenerate = 0;
         this.doorgenerate = 0;
+        this.win = 0;
 
         return true;
     },
 
+    ToThree:function (){
+        var level3 = new SceneThree();
+        cc.director.pushScene(level3);
+    },
+
     update:function (dt) {
+
+        this.win+=dt;
+        if(this.win>5){
+
+            this.ToThree();
+            /*this.getParent().pause();
+            this.getParent().bglayer.pause();
+            this.audioEngine.stopAllEffects()();
+            this.audioEngine.stopMusic();
+            this.pause();*/
+
+
+        }
 
         //updates for player
         this.CheckDirection();
