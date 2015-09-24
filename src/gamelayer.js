@@ -70,6 +70,11 @@ var GameLayer = cc.Layer.extend({
         this.win = 0;
         this.pausetimer = 0;
 
+        this.meterleft = new cc.LabelTTF("Health Remain:", "Helvetica", 14);
+        this.meterleft.setFontSize(30);
+        this.meterleft.setPosition(cc.p(600,400));
+        this.setColor(cc.color(255,0,0));
+        this.addChild(this.meterleft, 8);
         return true;
     },
 
@@ -79,8 +84,10 @@ var GameLayer = cc.Layer.extend({
     },
 
     update:function (dt) {
+        this.meterleft.setLocalZOrder(8);
+        this.meterleft.setString("Health Remain:" + this.playerhealth/10);
         this.win+=dt;
-        if(this.win>10){//win condition
+        if(this.win>100){//win condition
             this.winscreen = new cc.Sprite(res.cutscene2_png);
             this.winscreen.setAnchorPoint(0,0);
             this.winscreen.setLocalZOrder(6);
@@ -435,6 +442,7 @@ var GameLayer = cc.Layer.extend({
                     this.bullets.splice(i, 1);
                     this.playerhealth -= 10;
                     if(this.playerhealth === 0){
+                        this.meterleft.setString("Try Again");
                         cc.audioEngine.stopAllEffects();
                         cc.audioEngine.stopMusic();
                         var fail = new cc.Sprite(res.failscreen_png);
@@ -444,6 +452,8 @@ var GameLayer = cc.Layer.extend({
                         fail.x = 0;
                         fail.y = 0;
                         this.addChild(fail);
+                        this.pause();
+                        this.getParent().pause();
                     }
                 }
             }

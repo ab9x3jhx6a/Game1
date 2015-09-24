@@ -68,6 +68,13 @@ var res = {
     right_plist : "res/level1/right.plist",
 
     bni1_png : "res/level1/bni1.png",
+    ba1i1_png : "res/level1/bali1.png",
+    ba1i2_png : "res/level1/bali2.png",
+    ba1t1_png : "res/level1/balt1.png",
+    ba1t2_png : "res/level1/balt2.png",
+    ba2i1_png : "res/level1/ba2i1.png",
+    ba2i2_png : "res/level1/ba2i2.png",
+
 
 
     BossNormIdle_png : "res/level1/BossNormIdle.png",
