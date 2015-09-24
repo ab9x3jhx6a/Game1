@@ -70,11 +70,20 @@ var GameLayer = cc.Layer.extend({
         this.win = 0;
         this.pausetimer = 0;
 
-        this.meterleft = new cc.LabelTTF("Health Remain:", "Helvetica", 14);
-        this.meterleft.setFontSize(30);
-        this.meterleft.setPosition(cc.p(600,400));
+        //feedback parameters
+        this.remain = 1000;
+        this.pass = 0;
+        this.meterleft = new cc.LabelTTF("Distance Remain: 1000", "Helvetica", 14);
+        this.meterleft.setFontSize(20);
+        this.meterleft.setPosition(cc.p(200,400));
         this.setColor(cc.color(255,0,0));
         this.addChild(this.meterleft, 8);
+
+        this.healthremain = new cc.LabelTTF("Health Remain: ", "Helvetica", 14);
+        this.healthremain.setFontSize(20);
+        this.healthremain.setPosition(cc.p(600,400));
+        this.setColor(cc.color(255,0,0));
+        this.addChild(this.healthremain, 8);
         return true;
     },
 
@@ -84,10 +93,20 @@ var GameLayer = cc.Layer.extend({
     },
 
     update:function (dt) {
+        //distance left and health feedback
+        this.healthremain.setLocalZOrder(8);
         this.meterleft.setLocalZOrder(8);
-        this.meterleft.setString("Health Remain:" + this.playerhealth/10);
+        this.healthremain.setString("Health Remain: " + this.playerhealth/10);
         this.win+=dt;
-        if(this.win>100){//win condition
+        this.pass += dt;
+        if(this.pass >= 5){
+            this.remain-=50;
+            this.meterleft.setString("Distance Remain: " + this.remain);
+            this.pass = 0;
+        }
+
+        //win condition
+        if(this.win>100){
             this.winscreen = new cc.Sprite(res.cutscene2_png);
             this.winscreen.setAnchorPoint(0,0);
             this.winscreen.setLocalZOrder(6);
@@ -442,7 +461,7 @@ var GameLayer = cc.Layer.extend({
                     this.bullets.splice(i, 1);
                     this.playerhealth -= 10;
                     if(this.playerhealth === 0){
-                        this.meterleft.setString("Try Again");
+                        this.healthremain.setString("Try Again");
                         cc.audioEngine.stopAllEffects();
                         cc.audioEngine.stopMusic();
                         var fail = new cc.Sprite(res.failscreen_png);
